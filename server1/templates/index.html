@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Raja Ongkir API</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        async function fetchData(url) {
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        async function loadProvinces() {
+            const data = await fetchData("/provinsi");
+            if (data.status === 200) {
+                const provinces = data.results;
+                let options = "<option value=''>Select Province</option>";
+                provinces.forEach(province => {
+                    options += `<option value="${province.province_id}">${province.province}</option>`;
+                });
+                document.getElementById("province").innerHTML = options;
+            } else {
+                alert("Failed to load provinces");
+            }
+        }
+
+        async function loadCities() {
+            const data = await fetchData("/kota");
+            if (data.rajaongkir.status.code === 200) {
+                const cities = data.rajaongkir.results;
+                let options = "<option value=''>Select City</option>";
+                cities.forEach(city => {
+                    options += `<option value="${city.city_id}">${city.city_name}</option>`;
+                });
+                document.getElementById("origin").innerHTML = options;
+                document.getElementById("destination").innerHTML = options;
+            } else {
+                alert("Failed to load cities");
+            }
+        }
+
+        async function calculateOngkir(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch("/ongkir", {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
+            if (data.status === 200) {
+                document.getElementById("result").innerHTML = `
+                    <div class="alert alert-success">
+                        <p><strong>Kurir:</strong> ${data.result.kurir}</p>
+                        <p><strong>Paket Pengiriman:</strong> ${data.result.paket_pengiriman}</p>
+                        <p><strong>Ongkos Kirim:</strong> ${data.result.ongkos_kirim}</p>
+                        <p><strong>Estimasi Sampai:</strong> ${data.result.estimasi_sampai} hari</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById("result").innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+            }
+        }
+
+        window.onload = () => {
+            loadProvinces();
+            loadCities();
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Cek Harga Ongkos Kirim </h1>
+    </div>
+    <div class="container">
+        <div class="form-group">
+            <label for="province"><h2>Provinces</h2></label>
+            <select id="province" class="form-control"></select>
+        </div>
+
+        <h2>Calculate Ongkir</h2>
+        <form id="ongkirForm" onsubmit="calculateOngkir(event)" class="mb-4">
+            <div class="form-group">
+                <label for="origin">Origin City:</label>
+                <select id="origin" name="origin" class="form-control"></select>
+            </div>
+            
+            <div class="form-group">
+                <label for="destination">Destination City:</label>
+                <select id="destination" name="destination" class="form-control"></select>
+            </div>
+            
+            <div class="form-group">
+                <label for="weight">Weight (gram):</label>
+                <input type="text" id="weight" name="weight" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="courier">Courier:</label>
+                <input type="text" id="courier" name="courier" class="form-control">
+            </div>
+            
+            <div class="form-group">
+                <label for="service">Service:</label>
+                <input type="text" id="service" name="service" class="form-control">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Calculate</button>
+        </form>
+
+        <h2>Result</h2>
+        <div id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produk Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .product-details img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            max-height: 300px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .product-details p {
+            margin: 10px 0;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+        .alert {
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+        .product-details p span {
+            font-weight: 700;
+        }
+        .separator {
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Produk Details</h1>
+        {% if produk %}
+            <div class="product-details">
+                <p><span>Nama Produk:</span> {{ produk[4] }}</p>
+                <div class="separator"></div>
+                <p><span>ID Penjual:</span> {{ produk[1] }}</p>
+                <div class="separator"></div>
+                <p><span>Harga:</span> {{ produk[2] }}</p>
+                <div class="separator"></div>
+                <p><span>Berat:</span> {{ produk[3] }}</p>
+                <div class="separator"></div>
+                <p><span>Gambar Produk:</span> <img src="{{ produk[5] }}" alt="Gambar Produk"></p>
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                Produk not found.
+            </div>
+        {% endif %}
+        <a href="/" class="btn btn-primary btn-block mt-4">Search Another Produk</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

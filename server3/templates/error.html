@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            color: #d9534f;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #d9534f;
+            border-radius: 4px;
+            background-color: #f2dede;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Error</h1>
+        <p>{{ message }}</p>
+        {% if empty_form %}
+            <p>Fields missing:</p>
+            <ul>
+                {% for field in empty_form %}
+                    <li>{{ field }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
